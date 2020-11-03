@@ -6,7 +6,7 @@ const sequelize = require('../database/database.js');
 
 
 
-const cliente = sequelize.define('tb_produto', {
+const produto = sequelize.define('tb_produto', {
 
     cd_produto: {
         allowNull: false,        
@@ -22,4 +22,4 @@ const cliente = sequelize.define('tb_produto', {
     }    
 });
 
-module.exports = cliente;
+module.exports = produto;

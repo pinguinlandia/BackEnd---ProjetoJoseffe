@@ -1,6 +1,7 @@
 const express = require('express');
 const clienteController = require ('../controllers/clienteController');
 const produtoController = require('../controllers/produtoController');
+
 const router = express.Router();
 
 router.post('/clientes', clienteController.Insert);

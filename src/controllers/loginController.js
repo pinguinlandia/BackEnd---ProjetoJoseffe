@@ -1,24 +1,21 @@
-const cliente = require('../models/cliente');
+const login = require('../models/login');
 const status = require('http-status');
 
 // Cria o método Insert, obtendo os dados da request
 exports.Insert = (req, res, next) => {
         
-        const nm_cliente = req.body.nm_cliente;
-        const cd_cpf = req.body.cd_cpf;
-        const cd_rg = req.body.cd_rg;
+        const nm_login = req.body.nm_login;
+        const nm_senha = req.body.nm_senha;
         
-
-        cliente.create({                
-                nm_cliente: nm_cliente,
-                cd_cpf: cd_cpf,
-                cd_rg: cd_rg,                
+        login.create({
+                nm_login: nm_login,
+                nm_senha: nm_senha,
         })
         //then = registra o que queremos que aconteca quando a Promise for resolvida
 
-        .then(cliente => {
-                if (cliente) {
-                        res.status(status.OK).send(cliente);
+        .then(login => {
+                if (login) {
+                        res.status(status.OK).send(login);
                 } else {
                         res.status(status.NOT_FOUND).send();
                 }
@@ -31,23 +28,23 @@ exports.Insert = (req, res, next) => {
 
 exports.SelectAll = (req, res, next) => {
         
-        cliente.findAll()        
-                .then(cliente => {
-                        if (cliente) {
-                               res.status(status.OK).send(cliente);
+        login.findAll()        
+                .then(login => {
+                        if (login) {
+                               res.status(status.OK).send(login);
                         }
                 })
                 .catch(error => next(error));      
 }
 
 exports.SelectDetail = (req, res, next) => {
-        const cd_cliente = req.params.cd_cliente;
+        const fk_cd_cliente = req.params.fk_cd_cliente;
         
-        cliente.findByPk(cd_cliente)
+        login.findOne(fk_cd_cliente)
         
-        .then(cliente => {
-                if (cliente) {
-                       res.status(status.OK).send(cliente);
+        .then(login => {
+                if (login) {
+                       res.status(status.OK).send(login);
                 } else {
                         res.status(status.NOT_FOUND).send();
                 }
@@ -56,18 +53,19 @@ exports.SelectDetail = (req, res, next) => {
 };
 
 exports.Update = (req, res, next) => {
-        const cd_cliente = req.params.cd_cliente;
-        const nm_cliente = req.body.nm_cliente;
-        const cd_cpf = req.body.cd_cpf;
-        const cd_rg = req.body.cd_rg;        
+        const fk_cd_cliente = req.params.fk_cd_cliente;
+        const nm_login = req.body.nm_login;
+        const nm_senha = req.body.nm_senha;
         
-        cliente.findByPk(cd_cliente)
+        cliente.findOne(fk_cd_cliente)
         .then(cliente => {
                 if (cliente) {
                         cliente.update({
                                 nm_cliente: nm_cliente,
                                 cd_cpf: cd_cpf,
-                                cd_rg: cd_rg,                                
+                                cd_rg: cd_rg,
+                                nm_login: nm_login,
+                                nm_senha: nm_senha
                         },
                         {
                                 where: { cd_cliente: cd_cliente }
@@ -103,12 +101,3 @@ exports.Delete = (req, res, next) => {
         .catch(error => next(error));
 
 };
-
-
-
-
-
-
-
-
-    
