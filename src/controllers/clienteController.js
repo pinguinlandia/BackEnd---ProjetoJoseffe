@@ -42,9 +42,10 @@ exports.SelectAll = (req, res, next) => {
 
 exports.SelectDetail = (req, res, next) => {
         const cd_cliente = req.params.cd_cliente;
-        
+
         cliente.findByPk(cd_cliente)
         
+                
         .then(cliente => {
                 if (cliente) {
                        res.status(status.OK).send(cliente);
