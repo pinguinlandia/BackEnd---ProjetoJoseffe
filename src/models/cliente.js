@@ -33,6 +33,7 @@ const cliente = sequelize.define('tb_cliente', {
     
 });
 
+
 module.exports = cliente;
 
 
