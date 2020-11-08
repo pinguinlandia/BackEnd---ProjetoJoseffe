@@ -7,12 +7,16 @@ exports.Insert = (req, res, next) => {
         const nm_cliente = req.body.nm_cliente;
         const cd_cpf = req.body.cd_cpf;
         const cd_rg = req.body.cd_rg;
+        const login = req.body.login;
+        const senha = req.body.senha;
         
 
         cliente.create({                
                 nm_cliente: nm_cliente,
                 cd_cpf: cd_cpf,
-                cd_rg: cd_rg,                
+                cd_rg: cd_rg,
+                nm_login: login,
+                nm_senha: senha                 
         })
         //then = registra o que queremos que aconteca quando a Promise for resolvida
 
@@ -41,6 +45,7 @@ exports.SelectAll = (req, res, next) => {
 }
 
 exports.SelectDetail = (req, res, next) => {
+        
         const cd_cliente = req.params.cd_cliente;
 
         cliente.findByPk(cd_cliente)
@@ -57,10 +62,13 @@ exports.SelectDetail = (req, res, next) => {
 };
 
 exports.Update = (req, res, next) => {
+
         const cd_cliente = req.params.cd_cliente;
         const nm_cliente = req.body.nm_cliente;
         const cd_cpf = req.body.cd_cpf;
-        const cd_rg = req.body.cd_rg;        
+        const cd_rg = req.body.cd_rg;
+        const login = req.body.login;
+        const senha = req.body.senha;        
         
         cliente.findByPk(cd_cliente)
         .then(cliente => {
@@ -68,7 +76,9 @@ exports.Update = (req, res, next) => {
                         cliente.update({
                                 nm_cliente: nm_cliente,
                                 cd_cpf: cd_cpf,
-                                cd_rg: cd_rg,                                
+                                cd_rg: cd_rg,
+                                nm_login: login,
+                                nm_senha: senha                                
                         },
                         {
                                 where: { cd_cliente: cd_cliente }
@@ -87,6 +97,7 @@ exports.Update = (req, res, next) => {
 exports.Delete = (req, res, next) => {
         const cd_cliente = req.params.cd_cliente;
         cliente.findByPk(cd_cliente)
+
         .then(cliente => {
                 if (cliente) {
                         cliente.destroy({
@@ -103,6 +114,28 @@ exports.Delete = (req, res, next) => {
         })
         .catch(error => next(error));
 
+};
+
+exports.Logar = (req, res, next) => {
+        const nm_login = req.body.nm_login;   
+        const nm_senha = req.body.nm_senha;
+        
+        cliente.findAll({
+            attributes :
+                ['cd_cliente'],
+            where:{
+                    nm_login: nm_login,
+                    nm_senha: nm_senha                
+            }
+            })
+        .then(cliente => {
+            if (cliente) {
+                res.status(status.OK).send(cliente);
+            } else {
+                res.status(status.NOT_FOUND).send();
+            }
+        })
+        .catch(error => next(error));
 };
 
 

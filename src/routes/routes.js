@@ -6,6 +6,7 @@ const pedidoController = require('../controllers/pedidoController');
 const router = express.Router();
 
 router.post('/clientes', clienteController.Insert);
+router.get('/logar', clienteController.Logar);
 router.get('/clientes', clienteController.SelectAll);
 router.get('/clientes/:cd_cliente', clienteController.SelectDetail);
 router.put('/clientes/:cd_cliente', clienteController.Update);
