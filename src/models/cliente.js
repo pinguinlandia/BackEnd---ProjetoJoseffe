@@ -19,10 +19,10 @@ const cliente = sequelize.define('tb_cliente', {
         type: DataTypes.STRING(100),    
     },
     cd_cpf: {
-        type: DataTypes.INTEGER(13),    
+        type: DataTypes.STRING(13),    
     },
     cd_rg: {
-        type: DataTypes.INTEGER(10),
+        type: DataTypes.STRING(10),
     },
     nm_login: {
         type: DataTypes.STRING(50),

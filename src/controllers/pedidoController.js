@@ -64,26 +64,25 @@ exports.Update = (req, res, next) => {
 
         const fk_cd_cliente = req.body.fk_cd_cliente;
         const fk_cd_produto = req.body.fk_cd_produto;
-        const qt_produto = req.body.qt_produto;      
+        const qt_produto = req.body.qt_produto;
+        
+        
         
         pedido.findByPk(cd_pedido)
         
+        pedido.update({
+
+                fk_cd_cliente: fk_cd_cliente,  
+                fk_cd_produto: fk_cd_produto,
+                qt_produto: qt_produto                              
+        },                        
+        {
+                where: { cd_pedido: cd_pedido }
+        })
+        
         .then(pedido => {
                 if (pedido) {
-                        pedido.update({
-
-                                fk_cd_cliente: fk_cd_cliente,  
-                                fk_cd_produto: fk_cd_produto,
-                                qt_produto: qt_produto                              
-                        },                        
-                        {
-                                where: { cd_pedido: cd_pedido }
-                        })                        
-
-                        .then(() => {
-                                res.status(status.OK).send();
-                        })
-                        .catch(error => next(error));
+                        res.status(status.OK).send();                        
                 } else {
                         res.status(status.NOT_FOUND).send();
                 }
@@ -92,18 +91,22 @@ exports.Update = (req, res, next) => {
 };
 
 exports.Delete = (req, res, next) => {
+        
         const cd_pedido = req.params.cd_pedido;
+        
+        
+
+        pedido.destroy({
+                where: { cd_pedido: cd_pedido }
+        })
+        
         pedido.findByPk(cd_pedido)
 
         .then(pedido => {
-                if (pedido) {
-                        pedido.destroy({
-                                where: { cd_pedido: cd_pedido }
-                        })
-                        .then(() => {
-                                res.status(status.OK).send();
-                        })
-                        .catch(error => next(error));
+                if (pedido) {     
+                        res.status(status.OK).send();
+                        
+                        
                 }
                 else {
                         res.status(status.NOT_FOUND).send();

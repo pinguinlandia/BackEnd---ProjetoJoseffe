@@ -17,22 +17,16 @@ const pedido = sequelize.define('tb_pedido', {
     },    
     qt_produto: {
         
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
     },
     fk_cd_cliente: {
         
-        type: DataTypes.INTEGER,
-        references:{
-            model: 'tb_clientes',
-            key: 'cd_cliente'
-        }
+        type: DataTypes.STRING,
+        
     },
     fk_cd_produto: {
-        type: DataTypes.INTEGER,
-        references:{
-            model: 'tb_produtos',
-            key: 'cd_produto'
-        }
+        type: DataTypes.STRING,
+        
     }    
     
 });

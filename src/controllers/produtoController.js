@@ -1,4 +1,5 @@
 const produto = require('../models/produto');
+const pedido = require('../models/pedido');
 const status = require('http-status');
 
 // Cria o método Insert, obtendo os dados da request
@@ -58,19 +59,20 @@ exports.Update = (req, res, next) => {
     const vl_preco_produto = req.body.vl_preco_produto;    
     
     produto.findByPk(cd_produto)
-    .then(cliente => {
-            if (cliente) {
-                    cliente.update({
-                        nm_produto: nm_produto,
-                        vl_preco_produto: vl_preco_produto
-                    },
-                    {
-                            where: { cd_produto: cd_produto}
-                    })
-                    .then(() => {
-                            res.status(status.OK).send();
-                    })
-                    .catch(error => next(error));
+    .then(produto => {
+            if (produto) {
+                    
+                        produto.update({
+                                nm_produto: nm_produto,
+                                vl_preco_produto: vl_preco_produto
+                        },
+                        {
+                                where: { cd_produto: cd_produto}
+                        })
+                        .then(() => {
+                                res.status(status.OK).send();
+                        })
+                        .catch(error => next(error));
             } else {
                     res.status(status.NOT_FOUND).send();
             }
@@ -79,23 +81,26 @@ exports.Update = (req, res, next) => {
 };
 
 exports.Delete = (req, res, next) => {
-    const cd_produto = req.params.cd_produto;
+        const cd_produto = req.params.cd_produto;
+
+        pedido.destroy({ 
+                where:{ fk_cd_cliente: cd_produto}
+        })
+
+        produto.destroy({
+                where: { cd_produto: cd_produto }
+        })
     
-    produto.findByPk(cd_produto)
-    .then(produto => {
+        produto.findByPk(cd_produto)
+
+        .then(produto => {
             if (produto) {
-                    produto.destroy({
-                            where: { cd_produto: cd_produto }
-                    })
-                    .then(() => {
-                            res.status(status.OK).send();
-                    })
-                    .catch(error => next(error));
+                res.status(status.OK).send();                    
             }
             else {
-                    res.status(status.NOT_FOUND).send();
+                res.status(status.NOT_FOUND).send();
             }
-    })
-    .catch(error => next(error));
+        })
+        .catch(error => next(error));
 
 };

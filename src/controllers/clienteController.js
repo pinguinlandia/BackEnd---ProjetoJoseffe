@@ -1,4 +1,5 @@
 const cliente = require('../models/cliente');
+const pedido = require('../models/pedido'); 
 const status = require('http-status');
 
 // Cria o método Insert, obtendo os dados da request
@@ -7,8 +8,8 @@ exports.Insert = (req, res, next) => {
         const nm_cliente = req.body.nm_cliente;
         const cd_cpf = req.body.cd_cpf;
         const cd_rg = req.body.cd_rg;
-        const login = req.body.login;
-        const senha = req.body.senha;
+        const login = req.body.nm_login;
+        const senha = req.body.nm_senha;
         
 
         cliente.create({                
@@ -67,8 +68,8 @@ exports.Update = (req, res, next) => {
         const nm_cliente = req.body.nm_cliente;
         const cd_cpf = req.body.cd_cpf;
         const cd_rg = req.body.cd_rg;
-        const login = req.body.login;
-        const senha = req.body.senha;        
+        const login = req.body.nm_login;
+        const senha = req.body.nm_senha;        
         
         cliente.findByPk(cd_cliente)
         .then(cliente => {
@@ -95,25 +96,26 @@ exports.Update = (req, res, next) => {
 };
 
 exports.Delete = (req, res, next) => {
-        const cd_cliente = req.params.cd_cliente;
+        
+        const cd_cliente = req.params.cd_cliente;        
+
+        pedido.destroy({ 
+                where:{ fk_cd_cliente: cd_cliente}
+        })
+        
+        cliente.destroy({
+                where: { cd_cliente: cd_cliente }
+        })
         cliente.findByPk(cd_cliente)
 
         .then(cliente => {
                 if (cliente) {
-                        cliente.destroy({
-                                where: { cd_cliente: cd_cliente }
-                        })
-                        .then(() => {
-                                res.status(status.OK).send();
-                        })
-                        .catch(error => next(error));
+                    res.status(status.OK).send(cliente);
+                } else {
+                    res.status(status.NOT_FOUND).send();
                 }
-                else {
-                        res.status(status.NOT_FOUND).send();
-                }
-        })
-        .catch(error => next(error));
-
+            })
+            .catch(error => next(error));
 };
 
 exports.Logar = (req, res, next) => {
